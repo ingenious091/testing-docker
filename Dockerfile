@@ -21,4 +21,4 @@ RUN echo "Make sure flask is installed:"
 COPY run.py .
 
 # Set the default command to run your Python script:
-CMD ["python", "run.py"]
+# CMD ["python", "run.py"]

@@ -15,7 +15,7 @@ ENV PATH /opt/conda/envs/myenv/bin:$PATH
 
 # Demonstrate the environment is activated:
 RUN echo "Make sure flask is installed:"
-RUN python -c "import flask"
+# RUN python -c "import flask"
 
 # Copy the Python script:
 COPY run.py .

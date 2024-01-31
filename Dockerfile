@@ -1,24 +1,15 @@
-FROM continuumio/miniconda3
+ARG BASE=python:3.8
 
-WORKDIR /app
+FROM ${BASE}
 
-# Create the environment:
-COPY environment.yml .
-RUN conda env create -f environment.yml
+ARG SPLEETER_VERSION=2.3.2
+ENV MODEL_PATH /model
 
-# Make sure the shell is bash:
-SHELL ["/bin/bash", "-c"]
+RUN mkdir -p /model
+RUN apt-get update && apt-get install -y ffmpeg libsndfile1
+RUN pip install musdb museval
+RUN pip install spleeter==${SPLEETER_VERSION}
 
-# Activate the Conda environment:
-RUN echo "source activate myenv" >> ~/.bashrc
-ENV PATH /opt/conda/envs/myenv/bin:$PATH
+COPY audio.mp3 /audio.mp3
 
-# Demonstrate the environment is activated:
-RUN echo "Make sure flask is installed:"
-# RUN python -c "import flask"
-
-# Copy the Python script:
-COPY run.py .
-
-# Set the default command to run your Python script:
-# CMD ["python", "run.py"]
+ENTRYPOINT ["spleeter", "separate", "-o", "audio_output", "-p", "spleeter:4stems", "/audio.mp3"]
